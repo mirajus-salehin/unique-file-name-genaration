@@ -220,10 +220,7 @@ class Hashids(object):
         """Builds a hash from the passed `values`.
 
         :param values The values to transform into a hashid
-
-        >>> hashids = Hashids('arbitrary salt', 16, 'abcdefghijkl0123456')
-        >>> hashids.encode(1, 23, 456)
-        '1d6216i30h53elk3'
+        :return string The hashid
         """
         if not (values and all(_is_uint(x) for x in values)):
             return ''
@@ -235,10 +232,7 @@ class Hashids(object):
         """Restore a tuple of numbers from the passed `hashid`.
 
         :param hashid The hashid to decode
-
-        >>> hashids = Hashids('arbitrary salt', 16, 'abcdefghijkl0123456')
-        >>> hashids.decode('1d6216i30h53elk3')
-        (1, 23, 456)
+        :retun tuple
         """
         if not hashid or not _is_str(hashid):
             return ()
@@ -254,9 +248,7 @@ class Hashids(object):
         """Converts a hexadecimal string (e.g. a MongoDB id) to a hashid.
 
         :param hex_str The hexadecimal string to encodes
-
-        >>> Hashids.encode_hex('507f1f77bcf86cd799439011')
-        'y42LW46J9luq3Xq9XMly'
+        :return string The hashid string of the hexadecimal
         """
         numbers = (int('1' + hex_str[i:i+12], 16)
                    for i in range(0, len(hex_str), 12))
@@ -269,9 +261,7 @@ class Hashids(object):
         """Restores a hexadecimal string (e.g. a MongoDB id) from a hashid.
 
         :param hashid The hashid to decode
-
-        >>> Hashids.decode_hex('y42LW46J9luq3Xq9XMly')
-        '507f1f77bcf86cd799439011'
+        :return string The decoded hex
         """
         return ''.join(('%x' % x)[1:] for x in self.decode(hashid))
 
@@ -281,4 +271,3 @@ hs = Hashids()
 encodedFileName = hs.encode(int(timestamp))
 decodedFileName = hs.decode(encodedFileName)
 
-print(reduce(operator.add,decodedFileName))
