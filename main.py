@@ -1,13 +1,16 @@
 """Implements the hashids algorithm in python. For more information, visit http://hashids.org/"""
 
 import warnings
-from functools import wraps
+from functools import wraps,reduce
 from math import ceil
+import datetime
+import operator
 
-__version__ = '1.3.1'
 
 RATIO_SEPARATORS = 3.5
 RATIO_GUARDS = 12
+
+timestamp = datetime.datetime.now().strftime("%y%m%d%H%M%S")
 
 try:
     StrType = basestring
@@ -273,6 +276,9 @@ class Hashids(object):
         return ''.join(('%x' % x)[1:] for x in self.decode(hashid))
 
 
-h = Hashids()
+hs = Hashids()
 
-print(h.encode(123))
+encodedFileName = hs.encode(int(timestamp))
+decodedFileName = hs.decode(encodedFileName)
+
+print(reduce(operator.add,decodedFileName))
